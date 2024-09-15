@@ -60,3 +60,6 @@ print(summary(impacto))
 impacto <- lm(renda_pc ~ tratado + idade + luz + escolaridade, data = tempo1)
 print('Impacto do tratamento')
 print(summary(impacto))
+
+# O parâmetro de tratado é significativo, indicando que o tratamento teve impacto na renda per capita
+# Assim, a diferença nele não é explicada por diferenças nas outras variáveis
