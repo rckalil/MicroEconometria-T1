@@ -2,14 +2,18 @@
 install.packages("readxl")
 install.packages("lmtest")
 install.packages("sandwich")
+install.packages('ARDL')
 # Carregando o pacote
 library(readxl)
 library(lmtest)
 library(sandwich)
 library(ARDL)
 
+setwd(paste("/home/kalil/Documents/Graduacao/UFRJ/",
+            "MicroEconometria", sep = "/"))
+
 # Importar a planilha pro R
-dados <- read_excel("C:/Users/pontu/Documents/cursos/Intro Ec_tria IE/dados dem import 2018.xlsx", sheet = "Dados para regressao")
+dados <- read_excel("./DDMv2.xls", sheet = "Dados para regressao")
 
 # Pegando cada variavel separadamente
 M <- dados$M
