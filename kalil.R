@@ -63,3 +63,23 @@ print(summary(impacto))
 
 # O parâmetro de tratado é significativo, indicando que o tratamento teve impacto na renda per capita
 # Assim, a diferença nele não é explicada por diferenças nas outras variáveis
+
+# Diferença das diferenças
+tratado0_tempo0 <- subset(dados_3, dados_3$tratado == 0 & dados_3$tempo == 0)
+print(mean(tratado0_tempo0$renda_pc))
+
+tratado0_tempo1 <- subset(dados_3, dados_3$tratado == 0 & dados_3$tempo == 1)
+print(mean(tratado0_tempo1$renda_pc))
+
+tratado1_tempo0 <- subset(dados_3, dados_3$tratado == 1 & dados_3$tempo == 0)
+print(mean(tratado1_tempo0$renda_pc))
+
+tratado1_tempo1 <- subset(dados_3, dados_3$tratado == 1 & dados_3$tempo == 1)
+print(mean(tratado1_tempo1$renda_pc))
+
+diff <- mean(tratado1_tempo1$renda_pc) - mean(tratado1_tempo0$renda_pc) - mean(tratado0_tempo1$renda_pc) + mean(tratado0_tempo0$renda_pc)
+print(diff)
+
+diff_diff <- lm(renda_pc ~ tratado + tempo, data = dados_3)
+print('Diferença das diferenças')
+print(summary(diff_diff))
