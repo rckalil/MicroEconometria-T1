@@ -100,27 +100,6 @@ summary(modelo_did_efeitos_fixos)
 # significativo de impacto causal.
 
 
-# =============
-
-
-# Efeito causal via Diferença em Diferenças
-# (Renda trat. pós - Renda trat. pré) - (Renda controle pós - Renda controle pré)
-renda_tratado_pre <- mean(subset(dados, tratado == 1 & tempo == 0)$renda_pc)
-renda_tratado_pos <- mean(subset(dados, tratado == 1 & tempo == 1)$renda_pc)
-renda_controle_pre <- mean(subset(dados, tratado == 0 & tempo == 0)$renda_pc)
-renda_controle_pos <- mean(subset(dados, tratado == 0 & tempo == 1)$renda_pc)
-
-efeito_did <- (renda_tratado_pos - renda_tratado_pre) - (renda_controle_pos - renda_controle_pre)
-cat("Efeito causal via Diferença em Diferenças:", efeito_did, "\n")
-
-# O contrafactual é a renda que o grupo tratado teria obtido, se não tivesse recebido o tratamento,
-# o que é aproximado pela mudança na renda do grupo de controle.
-
-
-
-
-
-
 # ==============
 # # Renda familiar per capita média
 # renda_media <- mean(dados$renda_pc, na.rm = TRUE)
