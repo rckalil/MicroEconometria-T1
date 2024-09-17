@@ -44,7 +44,6 @@ print(teste_qui2) #P-valor bastante alto, não podendo rejeitar a H0 de que
 # proporções de pessoas com luz elétrica são iguais entre os grupos tratados e controle.
 
 # ## Cônjuge
-t.test(conjuge ~ tratado, data = tempo0)
 tabela_conjuge <- table(dados_3$conjuge, dados_3$tratado)
 teste_qui2 <- chisq.test(tabela_conjuge)
 print(teste_qui2)
@@ -70,19 +69,13 @@ impacto <- lm(renda_pc ~ tratado + idade + luz + escolaridade, data = tempo1)
 print("Impacto do tratamento")
 print(summary(impacto))
 
-
 #F)Tabela de médias de renda per capita e cálculo do efeito causal via Diferença em Diferenças
-tratado0_tempo0 <- subset(dados_3, dados_3$tratado == 0 & dados_3$tempo == 0)
-print(mean(tratado0_tempo0$renda_pc))
+renda_media_antes <- aggregate(renda_pc ~ tratado + tempo, data = subset(dados, tempo == 0), FUN = mean)
+renda_media_depois <- aggregate(renda_pc ~ tratado + tempo, data = subset(dados, tempo == 1), FUN = mean)
 
-tratado0_tempo1 <- subset(dados_3, dados_3$tratado == 0 & dados_3$tempo == 1)
-print(mean(tratado0_tempo1$renda_pc))
-
-tratado1_tempo0 <- subset(dados_3, dados_3$tratado == 1 & dados_3$tempo == 0)
-print(mean(tratado1_tempo0$renda_pc))
-
-tratado1_tempo1 <- subset(dados_3, dados_3$tratado == 1 & dados_3$tempo == 1)
-print(mean(tratado1_tempo1$renda_pc))
+# Criando a tabela de médias
+tabela_medias <- rbind(renda_media_antes, renda_media_depois)
+print(tabela_medias)
 
 #Efeito causal
 diff <- mean(tratado1_tempo1$renda_pc) - mean(tratado1_tempo0$renda_pc) - mean(tratado0_tempo1$renda_pc) + mean(tratado0_tempo0$renda_pc)
@@ -108,6 +101,27 @@ summary(modelo_did_efeitos_fixos)
 
 
 # =============
+
+
+# Efeito causal via Diferença em Diferenças
+# (Renda trat. pós - Renda trat. pré) - (Renda controle pós - Renda controle pré)
+renda_tratado_pre <- mean(subset(dados, tratado == 1 & tempo == 0)$renda_pc)
+renda_tratado_pos <- mean(subset(dados, tratado == 1 & tempo == 1)$renda_pc)
+renda_controle_pre <- mean(subset(dados, tratado == 0 & tempo == 0)$renda_pc)
+renda_controle_pos <- mean(subset(dados, tratado == 0 & tempo == 1)$renda_pc)
+
+efeito_did <- (renda_tratado_pos - renda_tratado_pre) - (renda_controle_pos - renda_controle_pre)
+cat("Efeito causal via Diferença em Diferenças:", efeito_did, "\n")
+
+# O contrafactual é a renda que o grupo tratado teria obtido, se não tivesse recebido o tratamento,
+# o que é aproximado pela mudança na renda do grupo de controle.
+
+
+
+
+
+
+# ==============
 # # Renda familiar per capita média
 # renda_media <- mean(dados$renda_pc, na.rm = TRUE)
 # cat("Renda familiar per capita média:", renda_media, "\n")
